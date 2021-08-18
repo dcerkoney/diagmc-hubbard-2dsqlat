@@ -76,11 +76,11 @@ where `<NTHREAD>` is the number of threads to be used for the build step.
 <!-- USAGE -->
 ## Usage
 
-To use the code, first edit the test input parameters in [hub_2dsqlat_rt_mcmc_chi_ch_example.cpp](src/hub_2dsqlat_rt_mcmc_chi_ch_example.cpp) and/or [hub_2dsqlat_rt_mcmc_self_en_example.cpp](src/hub_2dsqlat_rt_mcmc_self_en_example.cpp) as desired. The MCMC integrator is compatible with free energy, self energy, and charge/longitudinal spin susceptibility measurements. The provided examples calculate the charge susceptibility and self energy up to 2nd order in U. The charge susceptibility may optionally be compared with the RPA result obtained via the TRIQS TPRF package. 
+To use the code, first copy the configuration templates for either the charge polarization or self-energy example measurement into `config.yml` and `graph_info.json` in the project directory, and then edit the input parameters in [config.yml](https://github.com/dcerkoney/diagmc-hubbard-2dsqlat/tree/main/config.yml) as desired. The MCMC integrator is compatible with free energy, self energy, and charge/longitudinal spin susceptibility measurements. The provided examples calculate the charge susceptibility and self energy up to 2nd order in U. The charge susceptibility may optionally be compared with the RPA result obtained via the TRIQS TPRF package. 
 
 Several example sets of propagators/results are provided, but in order to run the code for a different set of test parameters, one may need to generate new propagators (i.e., if the code complains that a compatible lattice Green's function was not found). To this end, edit the [config.yml](https://github.com/dcerkoney/diagmc-hubbard-2dsqlat/blob/faeb4d796a64d23e2b2df93ce9a36d863556b61e/config.yml) file as desired, and then run the script [generate_propagators.py](generate_propagators.py). 
 
-Note that several config parameters are (re)calculated by the script, and need not be specified initially; namely, those with `null` value in the provided  [example config templates](https://github.com/dcerkoney/diagmc-hubbard-2dsqlat/tree/main/config_templates). Additionally, several config parameters may optionally be overriden by command line options for convenience; the usage details are accessible as follows:
+Note that several config parameters are (re)calculated by the script, and need not be specified initially; namely, those with a blank value in the provided  [example config templates](https://github.com/dcerkoney/diagmc-hubbard-2dsqlat/tree/main/config_templates). A config option with an explicit `null` value is an optional parameter which may be set by the user. Additionally, several config parameters may optionally be set (overriden) by command line options for convenience. The usage details are accessible as follows:
    ```
 python3 generate_propagators.py -h
 Usage: generate_propagators.py [ options ]
@@ -122,17 +122,9 @@ Options:
   --dry_run             perform a dry run (don't update config file or save
                         propagator data)
    ```
-Then, rebuild the project
+Then, run the executable:
    ```sh
-   (cd build && cmake ../src -DCMAKE_BUILD_TYPE=Release && make -j <NTHREAD>)
-   ```
-and run the executable of interest, e.g.:
-   ```sh
-    <MPI_PREFIX> ./chi_ch_example
-   ```
-or
-   ```sh
-    <MPI_PREFIX> ./self_en_example
+    <MPI_PREFIX> ./hub_2dsqlat_cf_meas
    ```
 where the (optional) MPI prefix could be, e.g., `mpirun -n 8` for a parallel run with 8 threads.
 
