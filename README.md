@@ -88,7 +88,7 @@ Several example sets of propagators/results are provided, but in order to run th
    ```
 python3 generate_propagators.py <CMDLINE_ARGS>
    ```
-If any applicable propagator data is found (stored by default in ./propagators/proprs_<JOB_ID>), it will be selected; otherwise, the propagators will be generated. Additionally, the scripts (re)calculates a number of parameters and updates the YAML (user-facing) and JSON (for internal use by the C++ driver) config files.
+If any applicable propagator data is found (stored by default in propagators/proprs_<JOB_ID>), it will be selected; otherwise, the propagators will be generated. Additionally, the scripts (re)calculates a number of parameters and updates the YAML (user-facing) and JSON (for internal use by the C++ driver) config files.
    
 Note that several config parameters are (re)calculated by the script, and need not be specified initially; namely, those with a blank value in the provided  [example config templates](https://github.com/dcerkoney/diagmc-hubbard-2dsqlat/tree/main/config_templates). A config option with an explicit `null` value is an optional parameter which may be set by the user. Additionally, several config parameters may optionally be set (overriden) by command line options for convenience. The usage details are accessible as follows:
    ```
