@@ -76,7 +76,13 @@ where `<NTHREAD>` is the number of threads to be used for the build step.
 <!-- USAGE -->
 ## Usage
 
-To use the code, first copy the configuration templates for either the charge polarization or self-energy example measurement into `config.yml` and `graph_info.json` in the project directory, and then edit the input parameters in [config.yml](https://github.com/dcerkoney/diagmc-hubbard-2dsqlat/tree/main/config.yml) as desired. The MCMC integrator is compatible with free energy, self energy, and charge/longitudinal spin susceptibility measurements. The provided examples calculate the charge susceptibility and self energy up to 2nd order in U. The charge susceptibility may optionally be compared with the RPA result obtained via the TRIQS TPRF package. 
+To use the code, first copy the configuration templates for either the charge polarization or self-energy example measurement into `config.yml` and `graph_info.json` in the project directory, e.g.,
+   ```sh
+cp config_templates/chi_ch_example_config.yml config.yml
+cp config_templates/chi_ch_example_graph_info.json graph_info.json
+   ```
+   
+and then edit the input parameters in [config.yml](https://github.com/dcerkoney/diagmc-hubbard-2dsqlat/tree/main/config.yml) as desired. The MCMC integrator is compatible with free energy, self energy, and charge/longitudinal spin susceptibility measurements. The provided examples calculate the charge susceptibility and self energy up to 2nd order in U. The charge susceptibility may optionally be compared with the RPA result obtained via the TRIQS TPRF package. 
 
 Several example sets of propagators/results are provided, but in order to run the code for a different set of test parameters, one may need to generate new propagators (i.e., if the code complains that a compatible lattice Green's function was not found). To this end, edit the [config.yml](https://github.com/dcerkoney/diagmc-hubbard-2dsqlat/blob/faeb4d796a64d23e2b2df93ce9a36d863556b61e/config.yml) file as desired, and then run the script [generate_propagators.py](generate_propagators.py) to prepare the propagator data:
    ```
