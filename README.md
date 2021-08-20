@@ -100,40 +100,40 @@ Usage: generate_propagators.py [ options ]
 Options:
   -h, --help            show this help message and exit
   --target_mu=TARGET_MU
-                        Target (noninteracting) chemical potential. If
-                        supplied, we work at fixed chemical potential and
-                        variable density; otherwise, we use a fixed density
-                        and variable chemical potential.
+                          Target (noninteracting) chemical potential. If
+                          supplied, we work at fixed chemical potential and
+                          variable density; otherwise, we use a fixed density
+                          and variable chemical potential.
   --target_n0=TARGET_N0
-                        Target density in units of the lattice constant; since
-                        the number of electrons is coarse-grained, the actual
-                        density may differ slightly. Default (n0 = 1)
-                        corresponds to half-filling (mu0 ~= 0).
+                          Target density in units of the lattice constant; since
+                          the number of electrons is coarse-grained, the actual
+                          density may differ slightly. Default (n0 = 1)
+                          corresponds to half-filling (mu0 ~= 0).
   --lat_length=LAT_LENGTH
-                        Lattice length in Bohr radii for working at fixed V.
-                        If supplied, the lattice constant is deduced from the
-                        lattice volume and number of sites per direction.
+                          Lattice length in Bohr radii for working at fixed V.
+                          If supplied, the lattice constant is deduced from the
+                          lattice volume and number of sites per direction.
   --lat_const=LAT_CONST
-                        lattice constant in Bohr radii
+                          lattice constant in Bohr radii
   --n_site_pd=N_SITE_PD
-                        number of lattice sites per direction
+                          number of lattice sites per direction
   --n_tau=N_TAU         number of tau points in the nonuniform mesh used for
-                        downsampling (an even number)
+                          downsampling (an even number)
   --n_nu=N_NU           number of bosonic frequency points in the uniform FFT
-                        mesh (an even number)
+                          mesh (an even number)
   --dim=DIM             spatial dimension of the lattice (default is 2);
-                        allowed values: {2, 3}
+                          allowed values: {2, 3}
   --beta=BETA           inverse temperature in inverse Hartrees
   --t_hop=T_HOP         tight-binding hopping parameter t
   --U_loc=U_LOC         onsite Hubbard interaction in Hartrees
   --config=CONFIG       relative path of the config file to be used (default:
-                        'config.yml')
+                          'config.yml')
   --propr_save_dir=PROPR_SAVE_DIR   
-                        subdirectory to save results to, if applicable
+                          subdirectory to save results to, if applicable
   --plot_g0             generate plots for the lattice Green's function
   --plot_pi0            generate plots for the polarization bubble
   --dry_run             perform a dry run (don't update config file or save
-                        propagator data)
+                          propagator data)
    ```
 If any applicable propagator data is found (stored by default in propagators/proprs_<JOB_ID>), it will be selected; otherwise, the propagators will be generated. Additionally, the script (re)calculates a number of parameters and updates the YAML (user-facing) and JSON (for internal use by the C++ driver) config files.
    
