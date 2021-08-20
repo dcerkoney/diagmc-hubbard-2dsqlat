@@ -56,12 +56,15 @@ To link against a specific MPI implementation (e.g., Intel or MPICH2), you may n
 
 ### 5. (Optional) [TRIQS TPRF](https://triqs.github.io/tprf/latest/)
 
-The TRIQS TPRF package is optionally used for benchmarking purposes in the post-processing script 'plot.py' if [`plot_rpa = True`](https://github.com/dcerkoney/diagmc-hubbard-2dsqlat/blob/d8035967acc7e31e4fbbbb16093cc0b762f5004a/plot.py#L888). It may be installed (along with [TRIQS](https://triqs.github.io/triqs/latest/) itself) via
+The TRIQS TPRF package is optionally used for benchmarking purposes in the post-processing script 'plot.py' if [`plot_rpa = True`](https://github.com/dcerkoney/diagmc-hubbard-2dsqlat/blob/d8035967acc7e31e4fbbbb16093cc0b762f5004a/plot.py#L888). It may be installed (along with [TRIQS](https://triqs.github.io/triqs/latest/) itself) via the TRIQS repository,
    ```sh
+    sudo apt-get update && sudo apt-get install -y software-properties-common apt-transport-https curl
+    source /etc/lsb-release
+    curl -L https://users.flatironinstitute.org/~ccq/triqs3/$DISTRIB_CODENAME/public.gpg | sudo apt-key add -
+    sudo add-apt-repository "deb https://users.flatironinstitute.org/~ccq/triqs3/$DISTRIB_CODENAME/ /"
     sudo apt-get install triqs_tprf
    ```
-For detailed installation instructions, see [here](https://triqs.github.io/tprf/latest/install.html) and [here](https://triqs.github.io/triqs/latest/install.html).
-
+For detailed installation instructions, see [here](https://triqs.github.io/triqs/latest/install.html) and [here](https://triqs.github.io/tprf/latest/install.html).
 
 <!-- INSTALLATION -->
 ## Installation
@@ -85,13 +88,11 @@ To use the code, first copy the configuration templates for either the charge po
 cp config_templates/chi_ch_example_config.yml config.yml
 cp config_templates/chi_ch_example_graph_info.json graph_info.json
    ```   
-edit the input parameters in [config.yml](https://github.com/dcerkoney/diagmc-hubbard-2dsqlat/tree/main/config.yml) as desired, and then run the script [generate_propagators.py](generate_propagators.py) to prepare the config and/or propagator data for the C++ driver `hub_2dsqlat_cf_meas`:
+edit the input parameters in [config.yml](https://github.com/dcerkoney/diagmc-hubbard-2dsqlat/tree/main/config.yml) as desired, and then run the script [generate_propagators.py](generate_propagators.py) to prepare the config and (if necessary) propagator data for the C++ driver `hub_2dsqlat_cf_meas`:
    ```
 python3 generate_propagators.py <CMDLINE_ARGS>
    ```
-If any applicable propagator data is found (stored by default in propagators/proprs_<JOB_ID>), it will be selected; otherwise, the propagators will be generated. Additionally, the script (re)calculates a number of parameters and updates the YAML (user-facing) and JSON (for internal use by the C++ driver) config files.
-   
-Note that several config parameters are (re)calculated by the script, and need not be specified initially; namely, those with a blank value in the provided [example config templates](https://github.com/dcerkoney/diagmc-hubbard-2dsqlat/tree/main/config_templates). A config option with an explicit `null` value is an optional parameter which may be set by the user. Additionally, several config parameters may optionally be set (overriden) by command line options for convenience. The usage details are accessible as follows:
+The usage details are accessible as follows:
    ```
 python3 generate_propagators.py -h
 Usage: generate_propagators.py [ options ]
@@ -133,7 +134,11 @@ Options:
   --dry_run             perform a dry run (don't update config file or save
                         propagator data)
    ```
-Finally, run the executable:
+If any applicable propagator data is found (stored by default in propagators/proprs_<JOB_ID>), it will be selected; otherwise, the propagators will be generated. Additionally, the script (re)calculates a number of parameters and updates the YAML (user-facing) and JSON (for internal use by the C++ driver) config files.
+   
+Note that several config parameters are (re)calculated by the script, and need not be specified initially; namely, those with a blank value in the provided [example config templates](https://github.com/dcerkoney/diagmc-hubbard-2dsqlat/tree/main/config_templates). A config option with an explicit `null` value is an optional parameter which may be set by the user. Additionally, several config parameters may optionally be set (overriden) by command line options for convenience. 
+
+Afterward, run the executable:
    ```sh
     <MPI_PREFIX> ./hub_2dsqlat_cf_meas
    ```
