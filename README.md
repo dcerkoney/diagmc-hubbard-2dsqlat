@@ -56,7 +56,7 @@ To link against a specific MPI implementation (e.g., Intel or MPICH2), you may n
 
 ### 5. (Optional) [TRIQS TPRF](https://triqs.github.io/tprf/latest/)
 
-The TRIQS TPRF package is optionally used for benchmarking purposes in the post-processing script 'plot.py' if [`plot_rpa = True`](https://github.com/dcerkoney/diagmc-hubbard-2dsqlat/blob/d8035967acc7e31e4fbbbb16093cc0b762f5004a/plot.py#L888). It may be installed (along with [TRIQS](https://triqs.github.io/triqs/latest/) itself) via the TRIQS repository,
+The TRIQS TPRF package is optionally used for benchmarking purposes in the post-processing script 'plot.py' if [`plot_rpa = True`](https://github.com/dcerkoney/diagmc-hubbard-2dsqlat/blob/f3e4401425171b1bb93c1f6e5d1de278f95d482e/plot.py#L854). It may be installed (along with [TRIQS](https://triqs.github.io/triqs/latest/) itself) via the TRIQS repository,
    ```sh
     sudo apt-get update && sudo apt-get install -y software-properties-common apt-transport-https curl
     source /etc/lsb-release
