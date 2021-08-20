@@ -128,7 +128,8 @@ Options:
   --U_loc=U_LOC         onsite Hubbard interaction in Hartrees
   --config=CONFIG       relative path of the config file to be used (default:
                         'config.yml')
-  --propr_save_dir=SAVE_DIR   subdirectory to save results to, if applicable
+  --propr_save_dir=PROPR_SAVE_DIR   
+                        subdirectory to save results to, if applicable
   --plot_g0             generate plots for the lattice Green's function
   --plot_pi0            generate plots for the polarization bubble
   --dry_run             perform a dry run (don't update config file or save
