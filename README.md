@@ -42,15 +42,19 @@ For backwards compatibility with some very old compilers (e.g., GCC < 5.3), the 
    ```sh
     sudo apt-get install libboost-system-dev libboost-filesystem-dev
    ```
+### 3. [ruamel.yaml](https://pypi.org/project/ruamel.yaml/) (for YAML with round-trip comment support)
+   ```sh
+    pip3 install ruamel.yaml 
+   ```
   
-### 3. (Optional) Open MPI or equivalent
+### 4. (Optional) Open MPI or equivalent
 Open MPI is packaged with most Linux distros nowadays; you can check that it is installed via, e.g., the following:
    ```sh
     sudo apt-get install openmpi-bin openmpi-common libopenmpi-dev
    ```
 To link against a specific MPI implementation (e.g., Intel or MPICH2), you may need to update your `PATH` and `LD_LIBRARY_PATH` environment variables accordingly and/or set the appropriate include directories explicitly in [CMakeLists.txt](https://github.com/dcerkoney/diagmc-hubbard-2dsqlat/blob/main/src/CMakeLists.txt) such that CMake chooses the correct libraries. For more details, see CMake's implementation of [FindMPI](https://github.com/Kitware/CMake/blob/master/Modules/FindMPI.cmake).
 
-### 4. (Optional) [TRIQS TPRF](https://triqs.github.io/tprf/latest/)
+### 5. (Optional) [TRIQS TPRF](https://triqs.github.io/tprf/latest/)
 
 The TRIQS TPRF package is optionally used for benchmarking purposes in the post-processing script 'plot.py' if [`plot_rpa = True`](https://github.com/dcerkoney/diagmc-hubbard-2dsqlat/blob/d8035967acc7e31e4fbbbb16093cc0b762f5004a/plot.py#L888). It may be installed (along with [TRIQS](https://triqs.github.io/triqs/latest/) itself) via
    ```sh
@@ -80,17 +84,14 @@ To use the code, first copy the configuration templates for either the charge po
    ```sh
 cp config_templates/chi_ch_example_config.yml config.yml
 cp config_templates/chi_ch_example_graph_info.json graph_info.json
-   ```
-   
-and then edit the input parameters in [config.yml](https://github.com/dcerkoney/diagmc-hubbard-2dsqlat/tree/main/config.yml) as desired. The MCMC integrator is compatible with free energy, self energy, and charge/longitudinal spin susceptibility measurements. The provided examples calculate the charge susceptibility and self energy up to 2nd order in U. The charge susceptibility may optionally be compared with the RPA result obtained via the TRIQS TPRF package. 
-
-Several example sets of propagators/results are provided, but in order to run the code for a different set of test parameters, one may need to generate new propagators (i.e., if the code complains that a compatible lattice Green's function was not found). To this end, edit the [config.yml](https://github.com/dcerkoney/diagmc-hubbard-2dsqlat/blob/faeb4d796a64d23e2b2df93ce9a36d863556b61e/config.yml) file as desired, and then run the script [generate_propagators.py](generate_propagators.py) to prepare the propagator data:
+   ```   
+edit the input parameters in [config.yml](https://github.com/dcerkoney/diagmc-hubbard-2dsqlat/tree/main/config.yml) as desired, and then run the script [generate_propagators.py](generate_propagators.py) to prepare the config and/or propagator data for the C++ driver `hub_2dsqlat_cf_meas`:
    ```
 python3 generate_propagators.py <CMDLINE_ARGS>
    ```
-If any applicable propagator data is found (stored by default in propagators/proprs_<JOB_ID>), it will be selected; otherwise, the propagators will be generated. Additionally, the scripts (re)calculates a number of parameters and updates the YAML (user-facing) and JSON (for internal use by the C++ driver) config files.
+If any applicable propagator data is found (stored by default in propagators/proprs_<JOB_ID>), it will be selected; otherwise, the propagators will be generated. Additionally, the script (re)calculates a number of parameters and updates the YAML (user-facing) and JSON (for internal use by the C++ driver) config files.
    
-Note that several config parameters are (re)calculated by the script, and need not be specified initially; namely, those with a blank value in the provided  [example config templates](https://github.com/dcerkoney/diagmc-hubbard-2dsqlat/tree/main/config_templates). A config option with an explicit `null` value is an optional parameter which may be set by the user. Additionally, several config parameters may optionally be set (overriden) by command line options for convenience. The usage details are accessible as follows:
+Note that several config parameters are (re)calculated by the script, and need not be specified initially; namely, those with a blank value in the provided [example config templates](https://github.com/dcerkoney/diagmc-hubbard-2dsqlat/tree/main/config_templates). A config option with an explicit `null` value is an optional parameter which may be set by the user. Additionally, several config parameters may optionally be set (overriden) by command line options for convenience. The usage details are accessible as follows:
    ```
 python3 generate_propagators.py -h
 Usage: generate_propagators.py [ options ]
@@ -126,20 +127,22 @@ Options:
   --U_loc=U_LOC         onsite Hubbard interaction in Hartrees
   --config=CONFIG       relative path of the config file to be used (default:
                         'config.yml')
-  --save_dir=SAVE_DIR   subdirectory to save results to, if applicable
+  --propr_save_dir=SAVE_DIR   subdirectory to save results to, if applicable
   --plot_g0             generate plots for the lattice Green's function
   --plot_pi0            generate plots for the polarization bubble
   --dry_run             perform a dry run (don't update config file or save
                         propagator data)
    ```
-Then, run the executable:
+Finally, run the executable:
    ```sh
     <MPI_PREFIX> ./hub_2dsqlat_cf_meas
    ```
 where the (optional) MPI prefix could be, e.g., `mpirun -n 8` for a parallel run with 8 threads.
 
+Several example sets of propagators/results are provided, but in order to run the code for a different set of test parameters, one may need to generate new propagators (i.e., if the code complains that a compatible lattice Green's function was not found). The MCMC integrator is compatible with free energy, self energy, and charge/longitudinal spin susceptibility measurements. The provided examples calculate the charge susceptibility and self energy up to 2nd order in U. The charge susceptibility may optionally be compared with the RPA result obtained via the TRIQS TPRF package.
+
 Running both example measurements at the default settings should take no more than a minute or two.
-However, reproducing all the figures provided (e.g., for the susceptibilities, by increasing to [`n_meas = 50000000`](https://github.com/dcerkoney/diagmc-hubbard-2dsqlat/blob/d8035967acc7e31e4fbbbb16093cc0b762f5004a/src/hub_2dsqlat_rt_mcmc_chi_ch_example.cpp#L21), [`n_nu_meas = 5`](https://github.com/dcerkoney/diagmc-hubbard-2dsqlat/blob/d8035967acc7e31e4fbbbb16093cc0b762f5004a/src/hub_2dsqlat_rt_mcmc_chi_ch_example.cpp#L23), and setting [`batch_U = true`](https://github.com/dcerkoney/diagmc-hubbard-2dsqlat/blob/d8035967acc7e31e4fbbbb16093cc0b762f5004a/src/hub_2dsqlat_rt_mcmc_chi_ch_example.cpp#L19)) will take more time—around half an hour on a typical machine.
+However, reproducing all the figures provided (e.g., for the susceptibilities, by increasing to [`n_meas = 50000000`](https://github.com/dcerkoney/diagmc-hubbard-2dsqlat/blob/7e51c5410c38abfa65dcaaac425d35e9e3e6a565/config.yml#L26), [`n_nu_meas = 5`](https://github.com/dcerkoney/diagmc-hubbard-2dsqlat/blob/7e51c5410c38abfa65dcaaac425d35e9e3e6a565/config.yml#L29), and setting [`use_batch_U = true`](https://github.com/dcerkoney/diagmc-hubbard-2dsqlat/blob/7e51c5410c38abfa65dcaaac425d35e9e3e6a565/config.yml#L24)) will take more time—around half an hour on a typical machine.
 
 Finally, use the [plot.py](plot.py) script for postprocessing:
 * To generate plots for all run subdirectories,
@@ -154,7 +157,6 @@ Finally, use the [plot.py](plot.py) script for postprocessing:
    ```sh
     python3 plot.py latest
    ```
-
 
 <!-- CONTACT -->
 ## Contact
